@@ -11,12 +11,17 @@
 # variable "ARM_SUBSCRIPTION_ID" {}
 # variable "ARM_TENANT_ID" {}
 
+variable "prefix" {
+  description 	= "vortx"
+  default 		= "vortx"
+}
+
 variable "name" {
-  default="vortx-metabase"
+  default	= "vortx-metabase"
 }
 
 variable "location" { 
-	default="Central US"
+	default	= "Central US"
 }
 
 variable  "image_name" {

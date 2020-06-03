@@ -10,29 +10,29 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "vortx" {
-  name     = "${var.name}"
-  location = "${var.location}"
+resource "azurerm_resource_group" "main" {
+  name     = "${var.prefix}-resources"
+  location = var.location
 }
 
-resource "azurerm_virtual_network" "vortx" {
-  name                = "vortx-network"
+resource "azurerm_virtual_network" "main" {
+  name                = "${var.prefix}-network"
   address_space       = ["10.0.0.0/16"]
-  location            = "${var.location}"
-  resource_group_name = "${var.name}"
+  location            = var.location
+  resource_group_name = "${var.prefix}-resources"
 }
 
-resource "azurerm_subnet" "vortx" {
-  name                 = "vortx-metabase-internal"
-  resource_group_name  = "${var.name}"
-  virtual_network_name = "vortx-metabase-internal"
+resource "azurerm_subnet" "main" {
+  name                 = "${var.prefix}-metabase-internal"
+  resource_group_name  = "${var.prefix}-resources"
+  virtual_network_name = "${var.prefix}-metabase-internal"
   address_prefix       = "10.0.2.0/24"
 }
 
-resource "azurerm_public_ip" "vortx" {
-  name                    = "vortx-metabase-pip"
-  location                = "${var.location}"
-  resource_group_name     = "${var.name}"
+resource "azurerm_public_ip" "main" {
+  name                    = "${var.prefix}-metabase-pip"
+  location                = var.location
+  resource_group_name     = "${var.prefix}-resources"
   allocation_method       = "Dynamic"
   idle_timeout_in_minutes = 30
 
@@ -42,10 +42,10 @@ resource "azurerm_public_ip" "vortx" {
   }
 }
 
-resource "azurerm_network_interface" "vortx" {
-  name                = "vortx-nic"
-  location            = "${var.location}"
-  resource_group_name = "${var.name}"
+resource "azurerm_network_interface" "main" {
+  name                = "${var.prefix}-nic"
+  location            = var.location
+  resource_group_name = "${var.prefix}-resources"
 
   ip_configuration {
     name                          = "internal"
@@ -59,15 +59,15 @@ resource "azurerm_network_interface" "vortx" {
   }
 }
 
-data "azurerm_image" "vortx" {
+data "azurerm_image" "main" {
   name                = "${var.image_name}"
-  resource_group_name = "vortx-metabase"
+  resource_group_name = "${var.prefix}-metabase"
 }
 
-resource "azurerm_linux_virtual_machine" "vortx" {
-  name                = "vortx-metabase-machine"
-  resource_group_name = "${var.name}"
-  location            = "${var.location}"
+resource "azurerm_linux_virtual_machine" "main" {
+  name                = "${var.prefix}-metabase-machine"
+  resource_group_name = "${var.prefix}-resources"
+  location            = var.location
   size                = "Standard_B1s"
   admin_username      = "adminuser"
   network_interface_ids = [
@@ -76,11 +76,11 @@ resource "azurerm_linux_virtual_machine" "vortx" {
 
   admin_ssh_key {
     username   = "adminuser"
-    public_key = "${file("${var.PATH_TO_PUBLIC_KEY}")}"
+    public_key = file("${var.PATH_TO_PUBLIC_KEY}")
   }
   
   os_disk {
-    name                 = "vortx-metabase-os-disl"
+    name                 = "${var.prefix}-metabase-os-disl"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
