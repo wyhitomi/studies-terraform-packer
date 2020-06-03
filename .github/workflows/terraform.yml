@@ -42,7 +42,7 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan
+      run: terraform plan -target=azurerm_resource_group.vortx
       working-directory: ./terraform
       env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
