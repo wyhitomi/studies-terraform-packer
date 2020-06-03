@@ -16,7 +16,7 @@ on:
 
 jobs:
   terraform-create-resouce-group:
-    name: 'Terraform Create Resource Group'
+    name: 'Terraform Resource Group'
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -64,7 +64,7 @@ jobs:
   
   packer:
     needs: [terraform-create-resouce-group]
-    name: 'Build Metabase image'
+    name: 'Packer Metabase Image'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -78,10 +78,12 @@ jobs:
         uses: operatehappy/packer-github-actions@master
         with:
           command: fix
+          target: packer/packer.json
+      
           
   terraform:
     needs: [terraform-create-resouce-group,packer]
-    name: 'Terraform Vortx Metabase Resources'
+    name: 'Terraform Metabase Resources'
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
