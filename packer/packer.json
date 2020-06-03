@@ -31,13 +31,13 @@
   }],
   "provisioners": [{
       "type": "file",
-      "source": ".packer/metabase.service",
-      "destination": "/etc/systemd/system/metabase.service"
+      "source": "packer/metabase.service",
+      "destination": "/tmp/metabase.service"
     },
     {
       "type": "file",
-      "source": ".packer/metabase.conf",
-      "destination": "/etc/rsyslog.d/metabase.conf"
+      "source": "packer/metabase.conf",
+      "destination": "/tmp/metabase.conf"
     },
     {
     "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
@@ -46,10 +46,10 @@
       "apt-get upgrade -y",
       "apt-get -y install nginx",
       "apt-get -y install postgres",
-      "apt-get install default-jre",
+      "apt-get -y install default-jre",
       "java -version",
       "mkdir -p /opt/metabase",
-      "curl -o /opt/metabase/metabase.jar http://downloads.metabase.com/v0.34.1/metabase.jar",
+      "curl -o /opt/metabase/metabase.jar https://downloads.metabase.com/v0.35.4/metabase.jar",
       "addgroup --quiet --system metabase",
       "adduser --quiet --system --ingroup metabase --no-create-home --disabled-password metabase",
       "chown -R metabase:metabase /opt/metabase",
@@ -57,6 +57,8 @@
       "chown metabase:metabase /var/log/metabase.log",
       "touch /etc/default/metabase",
       "chmod 640 /etc/default/metabase",
+      "mv /tmp/metabase.service /etc/systemd/system/metabase.service",
+      "mv /tmp/metabase.conf /etc/rsyslog.d/metabase.conf",
       "systemctl daemon-reload",
       "systemctl start metabase",
       "systemctl enable metabase",

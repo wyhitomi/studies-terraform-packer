@@ -1,3 +1,0 @@
-[submodule "metabase"]
-	path = metabase
-	url = https://github.com/metabase/metabase.git
