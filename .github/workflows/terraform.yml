@@ -61,9 +61,27 @@ jobs:
         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID}}
+  
+  packer:
+    needs: [terraform-create-resouce-group]
+    name: 'Build Metabase image'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
+      # fix backwards incompatibilities in template
+      - name: Fix Template
+        uses: operatehappy/packer-github-actions@master
+        with:
+          command: fix
+          
   terraform:
-    name: 'Terraform'
+    needs: [terraform-create-resouce-group,packer]
+    name: 'Terraform Vortx Metabase Resources'
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest

@@ -15,7 +15,7 @@ on:
   pull_request:
 
 jobs:
-  packer:
+  packer2:
     runs-on: ubuntu-latest
     name: packer
 
