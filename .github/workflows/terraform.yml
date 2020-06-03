@@ -73,20 +73,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Fix Template
+      - name: Fix Packer Template
         uses: operatehappy/packer-github-actions@master
         with:
           command: fix
           target: packer/packer.json
 
-      - name: Validate Template
+      - name: Validate Packer Template
         uses: operatehappy/packer-github-actions@master
         with:
           command: validate
           arguments: -syntax-only
           target: packer/packer.json
       
-      - name: Build Artifact
+      - name: Build Packer Artifact
         uses: operatehappy/packer-github-actions@master
         with:
           command: build
