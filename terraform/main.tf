@@ -1,10 +1,20 @@
 ###############################################################
 # 
 # Terraform
-# metabase.tf
+# main.tf
 # version 0.0.1
 # 
 ###############################################################
+
+provider "azurerm" {
+  version         = ">=2.5.0"
+  features {}
+}
+
+resource "azurerm_resource_group" "vortx" {
+  name     = "${var.name}"
+  location = "${var.location}"
+}
 
 resource "azurerm_virtual_network" "vortx" {
   name                = "vortx-network"
