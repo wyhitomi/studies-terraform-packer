@@ -79,7 +79,7 @@ jobs:
         with:
           command: validate
           arguments: -syntax-only
-          target: packer.json
+          target: packer/packer.json
 
       # build artifact
       - name: Build Artifact
@@ -87,7 +87,7 @@ jobs:
         with:
           command: build
           arguments: "-color=false -on-error=abort"
-          target: packer.json
+          target: packer/packer.json
 
   terraform:
     name: 'Terraform'
