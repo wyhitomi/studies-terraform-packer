@@ -49,9 +49,9 @@ resource "azurerm_network_interface" "main" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.vortx.id
+    subnet_id                     = azurerm_subnet.main.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.vortx.id
+    public_ip_address_id          = azurerm_public_ip.main.id
   }
   tags = {
     application = "metabase"
@@ -71,7 +71,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   size                = "Standard_B1s"
   admin_username      = "adminuser"
   network_interface_ids = [
-    azurerm_network_interface.vortx.id,
+    azurerm_network_interface.main.id,
   ]
 
   admin_ssh_key {
@@ -85,7 +85,7 @@ resource "azurerm_linux_virtual_machine" "main" {
     storage_account_type = "Standard_LRS"
   }
 
-  source_image_id = data.azurerm_image.vortx.id
+  source_image_id = data.azurerm_image.main.id
 
   tags = {
     application = "metabase"
