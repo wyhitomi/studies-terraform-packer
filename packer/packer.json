@@ -44,9 +44,7 @@
     "inline": [
       "apt-get update",
       "apt-get upgrade -y",
-      "apt-get -y install nginx",
-      "apt-get -y install postgres",
-      "apt-get -y install default-jre",
+      "apt -y install nginx postgresql default-jre",
       "java -version",
       "mkdir -p /opt/metabase",
       "curl -o /opt/metabase/metabase.jar https://downloads.metabase.com/v0.35.4/metabase.jar",
