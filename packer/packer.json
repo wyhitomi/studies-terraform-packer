@@ -49,16 +49,6 @@
       "destination": "/tmp/metabase"
     },
     {
-      "type": "file",
-      "source": "packer/metabase.nginx.conf",
-      "destination": "/tmp/metabase.nginx.conf"
-    },
-    {
-      "type": "file",
-      "source": "packer/certbot",
-      "destination": "/tmp/certbot"
-    },
-    {
     "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
     "inline": [
       "apt-get update",
@@ -98,5 +88,15 @@
     ],
     "inline_shebang": "/bin/sh -x",
     "type": "shell"
+  },
+  {
+    "type": "file",
+    "source": "packer/metabase.nginx.conf",
+    "destination": "/etc/nginx/sites-available/metabase.conf"
+  },
+  {
+    "type": "file",
+    "source": "packer/certbot",
+    "destination": "/tmp/certbot"
   }]
 }
