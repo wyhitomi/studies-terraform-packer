@@ -90,7 +90,7 @@
       "echo 'dns_cloudflare_api_key = {{user `cloudflare_api_key`}}' >> /root/.secrets/certbot/cloudflare.ini",
       "echo 'dns_cloudflare_email = {{user `cloudflare_email`}}' >> /root/.secrets/certbot/cloudflare.ini",
       "chmod 400 /root/.secrets/certbot/cloudflare.ini",
-      "certbot certonly -m wyhitomi@gmail.com --agree-tos --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/certbot/cloudflare.ini --dns-cloudflare-propagation-seconds 60 -d metabase.sproutfy.com.br",
+      "certbot certonly -m {{user `cloudflare_email`}} --agree-tos --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/certbot/cloudflare.ini --dns-cloudflare-propagation-seconds 60 -d metabase.sproutfy.com.br",
       "mv /tmp/certbot /etc/cron.d/certbot",
       
       "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
