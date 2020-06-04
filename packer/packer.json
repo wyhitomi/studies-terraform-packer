@@ -3,7 +3,8 @@
     "arm_client_id": "{{env `ARM_CLIENT_ID`}}",
     "arm_client_secret": "{{env `ARM_CLIENT_SECRET`}}",
     "arm_tenant_id": "{{env `ARM_TENANT_ID`}}",
-    "arm_subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}"
+    "arm_subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
+    "cloudflare_api_key": "{{env `CLOUDFLARE_API_KEY`}}"
   },
   "builders": [{
     "type": "azure-arm",
@@ -40,11 +41,26 @@
       "destination": "/tmp/metabase.conf"
     },
     {
+      "type": "file",
+      "source": "packer/metabase",
+      "destination": "/tmp/metabase"
+    },
+    {
+      "type": "file",
+      "source": "packer/metabase.nginx.conf",
+      "destination": "/tmp/metabase.nginx.conf"
+    },
+    {
+      "type": "file",
+      "source": "packer/certbot",
+      "destination": "/tmp/certbot"
+    },
+    {
     "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
     "inline": [
       "apt-get update",
       "apt-get upgrade -y",
-      "apt -y install nginx postgresql default-jre",
+      "apt -y install nginx default-jre",
       "java -version",
       "mkdir -p /opt/metabase",
       "curl -o /opt/metabase/metabase.jar https://downloads.metabase.com/v0.35.4/metabase.jar",
@@ -60,7 +76,18 @@
       "systemctl daemon-reload",
       "systemctl start metabase",
       "systemctl enable metabase",
-
+      "rm -rf /etc/nginx/sites-available/default",
+      "rm -rf /etc/nginx/sites-enabled/default",
+      "mv /etc/metabase.nginx.conf /etc/nginx/sites-available/metabase.conf",
+      "ln -sf /etc/nginx/sites-available/metabase.conf /etc/nginx/sites-enabled/metabase.conf",
+      "add-apt-repository ppa:certbot/certbot -y",
+      "apt update",
+      "apt install -y python-certbot-nginx",
+      "mkdir -p /root/.secrets/certbot/",
+      "echo 'dns_cloudflare_api_token = {{user `cloudflare_api_key`}}' >> /root/.secrets/certbot/cloudflare.ini",
+      "certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/certbot/cloudflare.ini --dns-cloudflare-propagation-seconds 60 -d metabase.sproutfy.com.br",
+      "mv /tmp/certbot /etc/cron.d/certbot",
+      
       "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
     ],
     "inline_shebang": "/bin/sh -x",

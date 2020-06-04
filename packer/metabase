@@ -1,0 +1,12 @@
+MB_PASSWORD_COMPLEXITY=normal
+MB_PASSWORD_LENGTH=10
+MB_JETTY_HOST=127.0.0.1
+MB_JETTY_PORT=3000
+MB_DB_TYPE=h2
+MB_DB_DBNAME=metabase_db_testing
+MB_DB_PORT=5432
+MB_DB_USER=metabase_user
+MB_DB_PASS=bWV0YWJhc2VfdXNlcgo=
+MB_DB_HOST=127.0.0.1
+MB_EMOJI_IN_LOGS=true
+# any other env vars you want available to Metabase
