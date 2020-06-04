@@ -60,8 +60,8 @@ resource "azurerm_network_interface" "main" {
 }
 
 data "azurerm_image" "main" {
-  name                = "${var.image_name}"
-  resource_group_name = "${var.name}-metabase"
+  name                  = "${var.image_name}"
+  resource_group_name   = "${var.name}-resources"
 }
 
 resource "azurerm_linux_virtual_machine" "main" {
