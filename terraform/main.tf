@@ -23,14 +23,14 @@ resource "azurerm_virtual_network" "main" {
 }
 
 resource "azurerm_subnet" "main" {
-  name                 = "${var.name}-metabase-internal"
+  name                 = "${var.name}-internal"
   resource_group_name  = "${var.name}-resources"
-  virtual_network_name = "${var.name}-metabase-internal"
+  virtual_network_name = "${var.name}-network"
   address_prefix       = "10.0.2.0/24"
 }
 
 resource "azurerm_public_ip" "main" {
-  name                    = "${var.name}-metabase-pip"
+  name                    = "${var.name}-pip"
   location                = var.location
   resource_group_name     = "${var.name}-resources"
   allocation_method       = "Dynamic"
@@ -65,7 +65,7 @@ data "azurerm_image" "main" {
 }
 
 resource "azurerm_linux_virtual_machine" "main" {
-  name                = "${var.name}-metabase-machine"
+  name                = "${var.name}-machine"
   resource_group_name = "${var.name}-resources"
   location            = var.location
   size                = "Standard_B1s"
@@ -80,7 +80,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
   
   os_disk {
-    name                 = "${var.name}-metabase-os-disl"
+    name                 = "${var.name}-os-disl"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
