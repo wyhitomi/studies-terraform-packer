@@ -11,28 +11,28 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "main" {
-  name     = "${var.prefix}-resources"
+  name     = "${var.name}-resources"
   location = var.location
 }
 
 resource "azurerm_virtual_network" "main" {
-  name                = "${var.prefix}-network"
+  name                = "${var.name}-network"
   address_space       = ["10.0.0.0/16"]
   location            = var.location
-  resource_group_name = "${var.prefix}-resources"
+  resource_group_name = "${var.name}-resources"
 }
 
 resource "azurerm_subnet" "main" {
-  name                 = "${var.prefix}-metabase-internal"
-  resource_group_name  = "${var.prefix}-resources"
-  virtual_network_name = "${var.prefix}-metabase-internal"
+  name                 = "${var.name}-metabase-internal"
+  resource_group_name  = "${var.name}-resources"
+  virtual_network_name = "${var.name}-metabase-internal"
   address_prefix       = "10.0.2.0/24"
 }
 
 resource "azurerm_public_ip" "main" {
-  name                    = "${var.prefix}-metabase-pip"
+  name                    = "${var.name}-metabase-pip"
   location                = var.location
-  resource_group_name     = "${var.prefix}-resources"
+  resource_group_name     = "${var.name}-resources"
   allocation_method       = "Dynamic"
   idle_timeout_in_minutes = 30
 
@@ -43,9 +43,9 @@ resource "azurerm_public_ip" "main" {
 }
 
 resource "azurerm_network_interface" "main" {
-  name                = "${var.prefix}-nic"
+  name                = "${var.name}-nic"
   location            = var.location
-  resource_group_name = "${var.prefix}-resources"
+  resource_group_name = "${var.name}-resources"
 
   ip_configuration {
     name                          = "internal"
@@ -61,12 +61,12 @@ resource "azurerm_network_interface" "main" {
 
 data "azurerm_image" "main" {
   name                = "${var.image_name}"
-  resource_group_name = "${var.prefix}-metabase"
+  resource_group_name = "${var.name}-metabase"
 }
 
 resource "azurerm_linux_virtual_machine" "main" {
-  name                = "${var.prefix}-metabase-machine"
-  resource_group_name = "${var.prefix}-resources"
+  name                = "${var.name}-metabase-machine"
+  resource_group_name = "${var.name}-resources"
   location            = var.location
   size                = "Standard_B1s"
   admin_username      = "adminuser"
@@ -80,7 +80,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
   
   os_disk {
-    name                 = "${var.prefix}-metabase-os-disl"
+    name                 = "${var.name}-metabase-os-disl"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
