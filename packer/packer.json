@@ -4,7 +4,9 @@
     "arm_client_secret": "{{env `ARM_CLIENT_SECRET`}}",
     "arm_tenant_id": "{{env `ARM_TENANT_ID`}}",
     "arm_subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
-    "cloudflare_api_key": "{{env `CLOUDFLARE_API_KEY`}}"
+    "cloudflare_api_token": "{{env `CLOUDFLARE_API_TOKEN`}}",
+    "cloudflare_api_key": "{{env `CLOUDFLARE_API_KEY`}}",
+    "cloudflare_email": "{{env `CLOUDFLARE_EMAIL`}}"
   },
   "builders": [{
     "type": "azure-arm",
@@ -82,10 +84,13 @@
       "ln -sf /etc/nginx/sites-available/metabase.conf /etc/nginx/sites-enabled/metabase.conf",
       "add-apt-repository ppa:certbot/certbot -y",
       "apt update",
-      "apt install -y python-certbot-nginx",
+      "apt install -y certbot python-certbot-nginx python3-certbot-dns-cloudflare",
       "mkdir -p /root/.secrets/certbot/",
-      "echo 'dns_cloudflare_api_token = {{user `cloudflare_api_key`}}' >> /root/.secrets/certbot/cloudflare.ini",
-      "certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/certbot/cloudflare.ini --dns-cloudflare-propagation-seconds 60 -d metabase.sproutfy.com.br",
+      "echo 'dns_cloudflare_api_token = {{user `cloudflare_api_token`}}' >> /root/.secrets/certbot/cloudflare.ini",
+      "echo 'dns_cloudflare_api_key = {{user `cloudflare_api_key`}}' >> /root/.secrets/certbot/cloudflare.ini",
+      "echo 'dns_cloudflare_email = {{user `cloudflare_email`}}' >> /root/.secrets/certbot/cloudflare.ini",
+      "chmod 400 /root/.secrets/certbot/cloudflare.ini",
+      "certbot certonly -m wyhitomi@gmail.com --agree-tos --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/certbot/cloudflare.ini --dns-cloudflare-propagation-seconds 60 -d metabase.sproutfy.com.br",
       "mv /tmp/certbot /etc/cron.d/certbot",
       
       "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
