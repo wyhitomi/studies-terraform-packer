@@ -1,5 +1,5 @@
 # Vortx - DevOps Tech Challenge
-![Terraform](https://github.com/wyhitomi/vortx-tech-challenge/workflows/Terraform/badge.svg?branch=master)
+![Terraform Metabase](https://github.com/wyhitomi/vortx-tech-challenge/workflows/Terraform%20Metabase/badge.svg?branch=master&event=deployment_status)
 
 ## Dependencies
 
