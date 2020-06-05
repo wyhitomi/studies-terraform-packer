@@ -6,7 +6,7 @@
 # 
 ###############################################################
 
-name: 'Terraform'
+name: 'Packer'
 
 on:
   push:
@@ -16,7 +16,7 @@ on:
 
 jobs:
   terraform-create-resouce-group:
-    name: 'Terraform Resource Group'
+    name: 'Terraform Packer Resource Group'
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
