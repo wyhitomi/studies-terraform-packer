@@ -10,29 +10,32 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "main" {
-  name     = "${var.name}-resources"
-  location = var.location
+resource "azurerm_resource_group" "vortx" {
+  name      = "${var.prefix}-resources"
+  location  = var.location
+  tags      = {
+    application = "metabase"
+  }
 }
 
-resource "azurerm_virtual_network" "main" {
-  name                = "${var.name}-network"
+resource "azurerm_virtual_network" "vortx" {
+  name                = "${var.prefix}-network"
+  resource_group_name = azurerm_resource_group.vortx.name
   address_space       = ["10.0.0.0/16"]
-  location            = var.location
-  resource_group_name = "${var.name}-resources"
+  location            = azurerm_resource_group.vortx.location
 }
 
-resource "azurerm_subnet" "main" {
-  name                 = "${var.name}-internal"
-  resource_group_name  = "${var.name}-resources"
-  virtual_network_name = "${var.name}-network"
-  address_prefix       = "10.0.2.0/24"
+resource "azurerm_subnet" "vortx" {
+  name                 = "${var.prefix}-network-internal"
+  resource_group_name  = azurerm_resource_group.vortx.name
+  virtual_network_name = azurerm_virtual_network.vortx.name
+  address_prefixes     = ["10.0.2.0/24"]
 }
 
-resource "azurerm_public_ip" "main" {
-  name                    = "${var.name}-pip"
-  location                = var.location
-  resource_group_name     = "${var.name}-resources"
+resource "azurerm_public_ip" "vortx" {
+  name                    = "${var.prefix}-${var.name}-machine-pip"
+  resource_group_name     = azurerm_resource_group.vortx.name
+  location                = azurerm_resource_group.vortx.location
   allocation_method       = "Dynamic"
   idle_timeout_in_minutes = 30
 
@@ -42,16 +45,16 @@ resource "azurerm_public_ip" "main" {
   }
 }
 
-resource "azurerm_network_interface" "main" {
-  name                = "${var.name}-nic"
-  location            = var.location
-  resource_group_name = "${var.name}-resources"
+resource "azurerm_network_interface" "vortx" {
+  name                    = "${var.prefix}-${var.name}-machine-nic"
+  resource_group_name     = azurerm_resource_group.vortx.name
+  location                = azurerm_resource_group.vortx.location
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.main.id
+    subnet_id                     = azurerm_subnet.vortx.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.main.id
+    public_ip_address_id          = azurerm_public_ip.vortx.id
   }
   tags = {
     application = "metabase"
@@ -59,19 +62,19 @@ resource "azurerm_network_interface" "main" {
   }
 }
 
-data "azurerm_image" "main" {
+data "azurerm_image" "vortx" {
   name                  = "${var.image_name}"
-  resource_group_name   = "${var.name}-images"
+  resource_group_name   = "${var.prefix}-metabase-images"
 }
 
-resource "azurerm_linux_virtual_machine" "main" {
-  name                = "${var.name}-machine"
-  resource_group_name = "${var.name}-resources"
-  location            = var.location
+resource "azurerm_linux_virtual_machine" "vortx" {
+  name                = "${var.prefix}-${var.name}-machine"
+  resource_group_name = azurerm_resource_group.vortx.name
+  location            = azurerm_resource_group.vortx.location
   size                = "Standard_B1s"
   admin_username      = "adminuser"
   network_interface_ids = [
-    azurerm_network_interface.main.id,
+    azurerm_network_interface.vortx.id,
   ]
 
   admin_ssh_key {
@@ -80,12 +83,12 @@ resource "azurerm_linux_virtual_machine" "main" {
   }
   
   os_disk {
-    name                 = "${var.name}-os-disl"
+    name                 = "${var.prefix}-${var.name}-machine-os-disk"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
 
-  source_image_id = data.azurerm_image.main.id
+  source_image_id = data.azurerm_image.vortx.id
 
   tags = {
     application = "metabase"

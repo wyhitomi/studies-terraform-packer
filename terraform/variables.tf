@@ -17,7 +17,7 @@ variable "prefix" {
 }
 
 variable "name" {
-  default	= "vortx-metabase"
+  default	= "metabase"
 }
 
 variable "location" { 
