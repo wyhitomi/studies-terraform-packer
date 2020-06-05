@@ -156,3 +156,26 @@ jobs:
         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID}}
+    
+    - name: Terraform Outputs
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      run: terraform outputs
+      working-directory: ./terraform
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID}}
+  
+  # cloudflare:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: kriasoft/create-dns-record@v1
+  #       with:
+  #         type: "A"
+  #         name: "metabase.sproutfy.com.br"
+  #         content: "example.com"
+  #         ttl: 1
+  #         proxied: true
+  #         token: ${{ secrets.CLOUDFLARE_TOKEN }}
+  #         zone: ${{ secrets.CLOUDFLARE_ZONE }}
