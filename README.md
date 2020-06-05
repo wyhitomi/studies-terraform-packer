@@ -51,9 +51,9 @@ export ARM_TENANT_ID=<your-tenant-id>
 2. Create the resource group.
 
 ```shell
-cd terraform
-terraform plan -target=azurerm_resource_group.main
-terraform apply -target=azurerm_resource_group.main
+cd packer
+terraform plan -out=teraform-packer.tfplan
+terraform apply "terraform-packer.tfplan"
 ```
 
 3. Create your Packer image
@@ -65,13 +65,16 @@ packer build packer/packer.json
 4. Deploy Metabase instance
 ```shell
 cd terraform
-terraform plan
-terraform apply
+terraform plan -out=teraform.tfplan
+terraform apply "teraform.tfplan"
 ```
 
 5. Destroy infrastructure
 ```shell
 cd terraform
+terraform destroy
+
+cd ../packer
 terraform destroy
 ```
 
