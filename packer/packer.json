@@ -17,7 +17,7 @@
     "tenant_id": "{{user `arm_tenant_id`}}",
     "subscription_id": "{{user `arm_subscription_id`}}",
 
-    "managed_image_resource_group_name": "vortx-metabase-resources",
+    "managed_image_resource_group_name": "vortx-metabase-images",
     "managed_image_name": "vortx-metabase-image",
 
     "os_type": "Linux",
