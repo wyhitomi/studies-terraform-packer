@@ -16,7 +16,7 @@ ARM_TENANT_ID=$4
 export SSH_KEY_NAME
 SSH_KEY_NAME="mykey"
 export IMAGE_NAME
-IMAGE_NAME="vortx-metabase-image"
+IMAGE_NAME="sproutfy-metabase-image"
 sed -i -e "s/default_image_name/${IMAGE_NAME}/g" terraform/vars.tf
 echo "***  starting packer"
 sh packer.sh $ARM_CLIENT_ID $ARM_CLIENT_SECRET $ARM_SUBSCRIPTION_ID $ARM_TENANT_ID;

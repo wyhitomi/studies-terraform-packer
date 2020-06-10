@@ -6,5 +6,5 @@
 # 
 ###############################################################
 output "instance_public_ips" {
-  value = ["${azurerm_public_ip.vortx.ip_address}"]
+  value = ["${azurerm_public_ip.sproutfy.ip_address}"]
 }

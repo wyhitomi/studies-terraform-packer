@@ -3,17 +3,17 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "vortx" {
-  name     = "vortx-metabase"
+resource "azurerm_resource_group" "sproutfy" {
+  name     = "sproutfy-metabase"
   location = "Central US"
 }
 
-resource "azurerm_container_group" "vortx-metabase" {
-  name                =  "vortx-metabase-continst"
-  location            =  azurerm_resource_group.vortx.location
-  resource_group_name =  azurerm_resource_group.vortx.name
+resource "azurerm_container_group" "sproutfy-metabase" {
+  name                =  "sproutfy-metabase-continst"
+  location            =  azurerm_resource_group.sproutfy.location
+  resource_group_name =  azurerm_resource_group.sproutfy.name
   ip_address_type     =  "public"
-  dns_name_label      =  "vortx-tech-challlenge"
+  dns_name_label      =  "sproutfy-tech-challlenge"
   os_type             =  "Linux"
 
   container {

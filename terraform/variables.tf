@@ -12,8 +12,8 @@
 # variable "ARM_TENANT_ID" {}
 
 variable "prefix" {
-  description 	= "vortx"
-  default 		= "vortx"
+  description 	= "sproutfy"
+  default 		= "sproutfy"
 }
 
 variable "name" {
@@ -25,7 +25,7 @@ variable "location" {
 }
 
 variable  "image_name" {
-	default = "vortx-metabase-image"
+	default = "sproutfy-metabase-image"
 }
 
 variable "PATH_TO_PRIVATE_KEY" {
@@ -37,5 +37,5 @@ variable "DEFAULT_SSH_PUBLIC_KEY" {
 }
 
 variable "INSTANCE_USERNAME" {
-	default = "vortx-metabase"
+	default = "sproutfy-metabase"
 }
